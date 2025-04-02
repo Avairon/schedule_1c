@@ -57,10 +57,8 @@ def write_pup() -> None:
 
         data = json_read()
 
-        for i in data:
-            if(name == i["pup_name"]):
-                print("Already exist! Nothing be do.\n------------")
-                return
+        flag = False
+        
 
         try:
             count = int(input("insert pup count: "))
@@ -68,11 +66,23 @@ def write_pup() -> None:
             print("Uncorrect input! Try again")
             return
 
-        type_ = input("insert pup type(0 - weed, 1 - meth, 2 - geroine): ")
+        for i in range(len(data)):
+            if data[i]["pup_name"] == name:
+                print(f"Changed {name}")
+                data[i]["pup_count"] += count
+                flag = True
+                break
+        
+        # Добавляем новую запись
+        if not flag:
+            type_ = input("insert pup type(0 - weed, 1 - meth, 2 - geroine): ")
+            data.append({"pup_name": name, "pup_count": count, "pup_type": type_})
 
-        json_write(name, count, type_)
+        # Записываем обновленные данные в файл
+        with open("data/pupirky.json", 'w') as file:
+            json.dump(data, file, indent=4)
 
-        print(f"------------\nAdded {name} {count} {type_}\n------------")
+        print(f"------------\nAdded {name} {count}\n------------")
     except Exception as e:
         print("Error!")
 

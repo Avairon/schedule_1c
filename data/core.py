@@ -22,15 +22,19 @@ def json_write(pup_name, pup_count, pup_type):
     Если запись с таким именем уже существует, ничего не делает.
     """
     data = json_read()
-
+    flag = False
     # Проверяем, есть ли уже запись с таким именем
-    for pup in data:
-        if pup["pup_name"] == pup_name:
-            print("Already exists! Nothing to do.")
-            return
+    for i in range(len(data)):
+        if data[i]["pup_name"] == pup_name:
+            print(f"Changed {pup_name}")
+            data[i]["pup_count"] += pup_count
+            flag = True
+            break
+
 
     # Добавляем новую запись
-    data.append({"pup_name": pup_name, "pup_count": pup_count, "pup_type": pup_type})
+    if not flag:
+        data.append({"pup_name": pup_name, "pup_count": pup_count, "pup_type": pup_type})
 
     # Записываем обновленные данные в файл
     with open("data/pupirky.json", 'w') as file:
