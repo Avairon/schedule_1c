@@ -1,1 +1,12 @@
-[{"pup_name": "Cookie", "pup_count": 12, "pup_type": "2"}]
+[
+    {
+        "pup_name": "Cookie",
+        "pup_count": 1,
+        "pup_type": "2"
+    },
+    {
+        "pup_name": "\u0411\u043e\u043c\u0431\u043e\u0447\u043a\u0430",
+        "pup_count": 10,
+        "pup_type": "0"
+    }
+]
