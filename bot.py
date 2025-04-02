@@ -8,14 +8,16 @@ import data.core as core  # Ваш модуль с функциями
 bot = telebot.TeleBot('7398324831:AAGg9ULjsKF6eEiuNasBWDjpwZF0PgR9doY')  # Замените '!!!' на токен вашего бота
 
 # Функция для периодического обновления состояния в консоли
+"""
 def console_update():
     while True:
         core.watch_pup()  # Вывод текущего состояния в консоль
         time.sleep(1)  # Обновление каждую секунду
+"""
 
 # Запуск потока для обновления консоли
-console_thread = threading.Thread(target=console_update, daemon=True)
-console_thread.start()
+#console_thread = threading.Thread(target=console_update, daemon=True)
+#console_thread.start()
 
 # Команда /start
 @bot.message_handler(commands=['start'])
