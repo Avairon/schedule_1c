@@ -77,6 +77,7 @@ def write_pup() -> None:
         print("Error!")
 
 def remove_pup() -> list:
+    watch_pup()
     name = str(input("------------\nInsert name: "))
     data = json_read()
     
@@ -108,7 +109,7 @@ def remove_pup() -> list:
     print(f"------------\nYou want delete {a} {b} {c}")
     choice = str(input("Are you sure? (y/n): "))
 
-    if(choice[0] != "y" and choice[0] != "Y"):
+    if((choice[0] != "y" and choice[0] != "Y") and (choice[0] != "д" and choice[0] != "Д")):
         return out
 
     updated_data = []
@@ -126,6 +127,7 @@ def remove_pup() -> list:
     return out
 
 def catch_pup() -> None:
+    watch_pup()
     name = str(input("------------\nInsert name: "))
 
     count_f = 0
@@ -148,7 +150,7 @@ def catch_pup() -> None:
         a = out["pup_name"]
         b = out["pup_count"]
 
-        print(f"------------\nSelected {a} {b}")
+        print(f"------------\nSelected {a}, count: {b}")
 
     count = str(input("Insert count: "))
 
@@ -165,8 +167,8 @@ def catch_pup() -> None:
                 if(data[i]["pup_count"] == 0):
                     print(f"------------\nCatched, ends {name} {count}\n------------")
                     ends = True
-
-                print(f"------------\nCatched {name} {count}\n------------")
+                else:
+                    print(f"------------\nCatched {name} {count}\n------------")
                 break
             else:
                 catched = data[i]["pup_count"]
