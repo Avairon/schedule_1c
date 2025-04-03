@@ -133,28 +133,32 @@ def print_menu():
     return input("Choice: ")
 
 if __name__ == "__main__":
-    IP = input("Insert server IP: ")
-
-    watch_pups()
-    choice = print_menu()
-    os.system('cls')
-
-    while choice[0] != "q":
-        if choice[0] == "1":
-            add_pup()
-        if choice[0] == "3":
-            write_pup()
-        elif choice[0] == "2":
-            catch_pup()
-        elif choice[0] == "4":
-            remove_pup()
-        elif choice[0] == "5":
-            search_pup()
-        elif choice[0] == "q":
-            break
-        else:
-            print("Invalid choice!")
+    try:
+        IP = input("Insert server IP: ")
+        SERVER_URL = f"http://{IP}:5000"
 
         watch_pups()
         choice = print_menu()
         os.system('cls')
+
+        while choice[0] != "q":
+            if choice[0] == "1":
+                add_pup()
+            if choice[0] == "3":
+                write_pup()
+            elif choice[0] == "2":
+                catch_pup()
+            elif choice[0] == "4":
+                remove_pup()
+            elif choice[0] == "5":
+                search_pup()
+            elif choice[0] == "q":
+                break
+            else:
+                print("Invalid choice!")
+
+            watch_pups()
+            choice = print_menu()
+            os.system('cls')
+    except Exception as e:
+        print(e)

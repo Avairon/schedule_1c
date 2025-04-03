@@ -1,1 +1,7 @@
-[{"pup_name": "Cookie", "pup_count": 12, "pup_type": "2"}]
+[
+    {
+        "pup_name": "Cookie",
+        "pup_count": 10,
+        "pup_type": "2"
+    }
+]
