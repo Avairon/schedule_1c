@@ -67,5 +67,127 @@ def search_pup(name):
         return jsonify({"error": f"Pupiryshka '{name}' not found"}), 404
     return jsonify(result), 200
 
+@app.route('/pups/add/<string:name>/<int:count>', methods=['POST'])
+def add_pupp(name, count):
+    count_f = 0
+    data = json_read()
+
+    for i in data:
+        if(name == i["pup_name"]):
+            count_f = 1
+            out = i
+            break
+
+        if(name == i["pup_name"][:len(name)]):
+            count_f += 1
+            out = i
+
+    if(count_f != 1):
+        #print("Not found! Nothing be do.\n------------")
+        return jsonify({"error": f"Pupiryshka '{name}' not found"}), 404
+
+        #print(f"------------\nSelected {a}, count: {b}")
+
+    out_res = jsonify({"error": f"Pupiryshka '{name}' not found"}), 404
+
+    for i in range(len(data)):
+        if(data[i] == out):
+            data[i]["pup_count"] += int(count)
+            out_res = jsonify({
+                "message": f"Added {count} to {data[i]['pup_name']}. Remaining: {data[i]['pup_count']}"
+            }), 200
+
+    with open("data/pupirky.json", 'w') as file:
+        json.dump(data, file, indent=4)
+
+    # Если запись не найдена
+    return out_res
+
+@app.route('/pups/catch/<string:name>/<int:count>', methods=['POST'])
+def catch_pup(name, count):
+    count_f = 0
+    data = json_read()
+
+    for i in data:
+        if(name == i["pup_name"]):
+            count_f = 1
+            out = i
+            break
+
+        if(name == i["pup_name"][:len(name)]):
+            count_f += 1
+            out = i
+
+    if(count_f != 1):
+        #print("Not found! Nothing be do.\n------------")
+        return jsonify({"error": f"Pupiryshka '{name}' not found"}), 404
+
+        #print(f"------------\nSelected {a}, count: {b}")
+
+    out_res = jsonify({"error": f"Pupiryshka '{name}' not found"}), 404
+
+    ends = False
+
+    for i in range(len(data)):
+        if(data[i] == out):
+            if(data[i]["pup_count"] >= int(count)):
+                data[i]["pup_count"] -= int(count)
+                name = data[i]["pup_name"]
+
+                if(data[i]["pup_count"] == 0):
+                    ends = True
+                    out_res = jsonify({
+                        "message": f"Catched {count} from {name}. Ends."
+                    }), 200
+                else:
+                    out_res = jsonify({
+                        "message": f"Catched {count} from {name}. Remaining: {data[i]['pup_count']}"
+                    }), 200
+            else:
+                data[i]["pup_count"] -= int(count)
+                name = data[i]["pup_name"]
+
+                ends = True
+
+                out_res = jsonify({
+                    "message": f"Not enough to catch {count}. Catched {data[i]['pup_count']}, ends."
+                }), 200
+    
+    updated_data = data
+
+    if(ends):
+        updated_data = []
+        for pup in data:
+            if pup == out:
+                continue
+            updated_data.append(pup)  # Добавляем остальные записи
+
+    with open("data/pupirky.json", 'w') as file:
+        json.dump(updated_data, file, indent=4)
+
+    # Если запись не найдена
+    return out_res
+
+@app.route('/pups/select/<string:name>', methods=['GET'])
+def select_pup(name):
+    count_f = 0
+    data = json_read()
+
+    for i in data:
+        if(name == i["pup_name"]):
+            count_f = 1
+            out_res = jsonify({"message": f"Selected {i['pup_name']}, remaining: {i['pup_count']}"}), 200
+            break
+
+        if(name == i["pup_name"][:len(name)]):
+            out_res = jsonify({"message": f"Selected {i['pup_name']}, remaining: {i['pup_count']}"}), 200
+            count_f += 1
+
+    if(count_f != 1):
+        #print("Not found! Nothing be do.\n------------")
+        return jsonify({"error": f"Pupiryshka '{name}' not found"}), 404
+
+    return out_res
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)  # Запуск сервера на всех интерфейсах

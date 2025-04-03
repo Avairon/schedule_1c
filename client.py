@@ -1,6 +1,21 @@
 import requests
+import os
 
-SERVER_URL = "http://<server-ip>:5000"  # Замените <server-ip> на IP-адрес сервера
+IP = "127.0.0.1"
+SERVER_URL = f"http://{IP}:5000"  # Замените <server-ip> на IP-адрес сервера
+
+def select_pup(name):
+    response = requests.get(f"{SERVER_URL}/pups/select/{name}")
+
+    if response.status_code == 200:
+        print(response.json()["message"])
+        return 1
+    elif response.status_code == 404:
+        print(response.json()["error"])
+        return 0
+    else:
+        print(f"Error: {response.status_code}")
+        return 0
 
 # Получение всех записей
 def watch_pups():
@@ -69,20 +84,71 @@ def search_pup():
     else:
         print(f"Error: {response.status_code}")
 
-# Главное меню
+def catch_pup():
+    watch_pups()
+    name = input("Insert name to catch: ")
+
+    if select_pup(name) == 0:
+        return
+    
+    try:
+        count = int(input("Insert count to catch: "))
+    except ValueError:
+        print("Incorrect input! Try again.")
+        return
+
+    response = requests.post(f"{SERVER_URL}/pups/catch/{name}/{count}")
+
+    if response.status_code == 200:
+        print(response.json()["message"])
+    elif response.status_code == 404:
+        print(response.json()["error"])
+    else:
+        print(f"Error: {response.status_code}")
+
+def add_pup():
+    watch_pups()
+    name = input("Insert name to add: ")
+
+    if select_pup(name) == 0:
+        return
+
+    try:
+        count = int(input("Insert count to add: "))
+    except ValueError:
+        print("Incorrect input! Try again.")
+        return
+
+    response = requests.post(f"{SERVER_URL}/pups/add/{name}/{count}")
+
+    if response.status_code == 200:
+        print(response.json()["message"])
+    elif response.status_code == 404:
+        print(response.json()["error"])
+    else:
+        print(f"Error: {response.status_code}")
+
 def print_menu():
-    print("============\n1 - Insert pupiryshki\n2 - Remove pupiryshki\n3 - Search pupiryshki\nq - exit\n============")
+    print("============\n1 - Add count of pupiryshki\n2 - Catch pupiryshki\n3 - Insert pupiryshki\n4 - Remove pupiryshki\n5 - Search pupiryshki\nq - exit\n============")
     return input("Choice: ")
 
 if __name__ == "__main__":
+    IP = input("Insert server IP: ")
+
+    watch_pups()
     choice = print_menu()
+    os.system('cls')
 
     while choice[0] != "q":
         if choice[0] == "1":
+            add_pup()
+        if choice[0] == "3":
             write_pup()
         elif choice[0] == "2":
+            catch_pup()
+        elif choice[0] == "4":
             remove_pup()
-        elif choice[0] == "3":
+        elif choice[0] == "5":
             search_pup()
         elif choice[0] == "q":
             break
@@ -91,3 +157,4 @@ if __name__ == "__main__":
 
         watch_pups()
         choice = print_menu()
+        os.system('cls')
